@@ -28,12 +28,7 @@ public class HybridSpawnEggRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public boolean fits(int width, int height) {
-        return width * height >= 3;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<HybridSpawnEggRecipe> getSerializer() {
         return MobMixerMod.HYBRID_SPAWN_EGG_RECIPE;
     }
 
@@ -43,7 +38,7 @@ public class HybridSpawnEggRecipe extends SpecialCraftingRecipe {
         boolean hasCatalyst = false;
 
         for (int slot = 0; slot < inventory.size(); slot++) {
-            ItemStack stack = inventory.getStack(slot);
+            ItemStack stack = inventory.getStackInSlot(slot);
             if (stack.isEmpty()) {
                 continue;
             }
@@ -77,13 +72,13 @@ public class HybridSpawnEggRecipe extends SpecialCraftingRecipe {
             return ItemStack.EMPTY;
         }
 
-        if (firstSpawnEgg.getEntityType(firstEgg.getNbt()) == secondSpawnEgg.getEntityType(secondEgg.getNbt())) {
+        if (firstSpawnEgg.getEntityType(null) == secondSpawnEgg.getEntityType(null)) {
             return ItemStack.EMPTY;
         }
 
         return HybridSpawnData.createEgg(
-            firstSpawnEgg.getEntityType(firstEgg.getNbt()),
-            secondSpawnEgg.getEntityType(secondEgg.getNbt())
+            firstSpawnEgg.getEntityType(null),
+            secondSpawnEgg.getEntityType(null)
         );
     }
 }

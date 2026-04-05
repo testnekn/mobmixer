@@ -1,6 +1,7 @@
 package ru.aleksey.mobmixer.item;
 
-import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
@@ -60,12 +61,18 @@ public class HybridSpawnEggItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.translatable("item.mobmixer.hybrid_spawn_egg.tooltip_1").formatted(Formatting.GRAY));
+    public void appendTooltip(
+        ItemStack stack,
+        Item.TooltipContext context,
+        TooltipDisplayComponent displayComponent,
+        Consumer<Text> textConsumer,
+        TooltipType type
+    ) {
+        textConsumer.accept(Text.translatable("item.mobmixer.hybrid_spawn_egg.tooltip_1").formatted(Formatting.GRAY));
         if (HybridSpawnData.hasParents(stack)) {
-            tooltip.add(Text.translatable("item.mobmixer.hybrid_spawn_egg.parent_1", HybridSpawnData.getFirstParentName(stack)).formatted(Formatting.DARK_AQUA));
-            tooltip.add(Text.translatable("item.mobmixer.hybrid_spawn_egg.parent_2", HybridSpawnData.getSecondParentName(stack)).formatted(Formatting.DARK_AQUA));
+            textConsumer.accept(Text.translatable("item.mobmixer.hybrid_spawn_egg.parent_1", HybridSpawnData.getFirstParentName(stack)).formatted(Formatting.DARK_AQUA));
+            textConsumer.accept(Text.translatable("item.mobmixer.hybrid_spawn_egg.parent_2", HybridSpawnData.getSecondParentName(stack)).formatted(Formatting.DARK_AQUA));
         }
-        tooltip.add(Text.translatable("item.mobmixer.hybrid_spawn_egg.tooltip_2").formatted(Formatting.DARK_GRAY));
+        textConsumer.accept(Text.translatable("item.mobmixer.hybrid_spawn_egg.tooltip_2").formatted(Formatting.DARK_GRAY));
     }
 }

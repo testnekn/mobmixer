@@ -12,6 +12,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -19,14 +20,14 @@ import org.jetbrains.annotations.Nullable;
 
 public final class HybridMobFactory {
     private static final int BONUS_DURATION = 20 * 60 * 10;
-    private static final List<EntityAttribute> BLENDED_ATTRIBUTES = List.of(
-        EntityAttributes.GENERIC_MAX_HEALTH,
-        EntityAttributes.GENERIC_MOVEMENT_SPEED,
-        EntityAttributes.GENERIC_ATTACK_DAMAGE,
-        EntityAttributes.GENERIC_ARMOR,
-        EntityAttributes.GENERIC_ATTACK_KNOCKBACK,
-        EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
-        EntityAttributes.GENERIC_FOLLOW_RANGE
+    private static final List<RegistryEntry<EntityAttribute>> BLENDED_ATTRIBUTES = List.of(
+        EntityAttributes.MAX_HEALTH,
+        EntityAttributes.MOVEMENT_SPEED,
+        EntityAttributes.ATTACK_DAMAGE,
+        EntityAttributes.ARMOR,
+        EntityAttributes.ATTACK_KNOCKBACK,
+        EntityAttributes.KNOCKBACK_RESISTANCE,
+        EntityAttributes.FOLLOW_RANGE
     );
 
     private HybridMobFactory() {
@@ -35,13 +36,13 @@ public final class HybridMobFactory {
     @Nullable
     public static MobEntity createHybrid(ServerWorld world, BlockPos pos, EntityType<?> firstParent, EntityType<?> secondParent) {
         EntityType<?> dominantParent = world.random.nextBoolean() ? firstParent : secondParent;
-        Entity entity = dominantParent.create(world);
+        Entity entity = dominantParent.create(world, SpawnReason.COMMAND);
         if (!(entity instanceof MobEntity child)) {
             return null;
         }
 
         child.refreshPositionAndAngles(pos, world.random.nextFloat() * 360.0F, 0.0F);
-        child.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWN_EGG, null, null);
+        child.initialize(world, world.getLocalDifficulty(pos), SpawnReason.COMMAND, null);
         blendTraits(world, child, firstParent, secondParent);
         child.setHealth(child.getMaxHealth());
         child.setPersistent();
@@ -56,7 +57,7 @@ public final class HybridMobFactory {
         LivingEntity secondTemplate = createTemplate(world, secondParent);
 
         if (firstTemplate != null && secondTemplate != null) {
-            for (EntityAttribute attribute : BLENDED_ATTRIBUTES) {
+            for (RegistryEntry<EntityAttribute> attribute : BLENDED_ATTRIBUTES) {
                 blendAttribute(child, firstTemplate, secondTemplate, attribute);
             }
 
@@ -88,21 +89,26 @@ public final class HybridMobFactory {
 
     @Nullable
     private static LivingEntity createTemplate(ServerWorld world, EntityType<?> parentType) {
-        Entity entity = parentType.create(world);
+        Entity entity = parentType.create(world, SpawnReason.COMMAND);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return null;
         }
 
         if (livingEntity instanceof MobEntity mobEntity) {
-            BlockPos pos = BlockPos.ofFloored(world.getSpawnPos());
+            BlockPos pos = world.getSpawnPos();
             mobEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
-            mobEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.COMMAND, null, null);
+            mobEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.COMMAND, null);
         }
 
         return livingEntity;
     }
 
-    private static void blendAttribute(MobEntity child, LivingEntity firstTemplate, LivingEntity secondTemplate, EntityAttribute attribute) {
+    private static void blendAttribute(
+        MobEntity child,
+        LivingEntity firstTemplate,
+        LivingEntity secondTemplate,
+        RegistryEntry<EntityAttribute> attribute
+    ) {
         EntityAttributeInstance childAttribute = child.getAttributeInstance(attribute);
         EntityAttributeInstance firstAttribute = firstTemplate.getAttributeInstance(attribute);
         EntityAttributeInstance secondAttribute = secondTemplate.getAttributeInstance(attribute);
