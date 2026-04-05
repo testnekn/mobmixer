@@ -1,0 +1,10 @@
+{
+  "item.mobmixer.hybrid_spawn_egg": "Hybrid Mob Spawn Egg",
+  "item.mobmixer.hybrid_spawn_egg.named": "Hybrid: %1$s × %2$s",
+  "item.mobmixer.hybrid_spawn_egg.tooltip_1": "Combine two different spawn eggs and slime on a crafting table.",
+  "item.mobmixer.hybrid_spawn_egg.tooltip_2": "The hybrid gains blended stats and bonuses from both parents.",
+  "item.mobmixer.hybrid_spawn_egg.parent_1": "Parent 1: %1$s",
+  "item.mobmixer.hybrid_spawn_egg.parent_2": "Parent 2: %1$s",
+  "item.mobmixer.unknown_parent": "Unknown mob",
+  "entity.mobmixer.hybrid_name": "Hybrid %1$s × %2$s"
+}

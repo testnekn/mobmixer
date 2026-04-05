@@ -1,0 +1,10 @@
+{
+  "item.mobmixer.hybrid_spawn_egg": "Яйцо гибридного моба",
+  "item.mobmixer.hybrid_spawn_egg.named": "Гибрид: %1$s × %2$s",
+  "item.mobmixer.hybrid_spawn_egg.tooltip_1": "Соедини два разных яйца призыва и слизь на верстаке.",
+  "item.mobmixer.hybrid_spawn_egg.tooltip_2": "Гибрид получает смешанные характеристики и бонусы от родителей.",
+  "item.mobmixer.hybrid_spawn_egg.parent_1": "Родитель 1: %1$s",
+  "item.mobmixer.hybrid_spawn_egg.parent_2": "Родитель 2: %1$s",
+  "item.mobmixer.unknown_parent": "Неизвестный моб",
+  "entity.mobmixer.hybrid_name": "Гибрид %1$s × %2$s"
+}
